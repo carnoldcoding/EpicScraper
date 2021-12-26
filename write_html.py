@@ -6,13 +6,33 @@ def write_html(listings):
         <html lang="en">
             <head>
                 <meta charset="UTF-8">
-                <title>Your Update %d </title>
-                <h1 style="text-align: center; color: blue;"> Working well </h1>
+                <title>Your Update </title>
+                <style>
+                body {background-color: black;}
+                h1 {
+                color: white;
+                }
+                h3 {
+                color: white;
+                }
+                p{
+                color: white;
+                border: 1px solid white;
+                }
+                
+                .container{
+                display: flex
+                }
+                .container > * {flex-basis: 100%;}
+                
+                    
+                </style>
+                <h1> EpicNPC Update </h1>
             </head>
-    ''' % num
+    '''
     for listing in listings:
         html += '''
-        <div style="text-align: center;">
+        <div class="container">
             <h3> Title: %s </h3>
             <p> Author: %s </p>
             <p> User Likes: %s </p>

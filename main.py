@@ -14,7 +14,7 @@ def main():
     new_urls = compare(read_urls(file_url),
                        only_urls(listings))  # Compare what's in the file to what was pulled from the web
     write_html(listings)
-    send_message("Thanks for using CarnoldPyBot v1.00")
+    # send_message("Thanks for using CarnoldPyBot v1.00")
 
     # write_urls(listings)
 
