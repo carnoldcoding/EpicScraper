@@ -1,6 +1,7 @@
 import bs4.element
 from bs4 import BeautifulSoup
 import requests
+from fileIO import *
 
 
 # Send HTTP Request and store the response
@@ -27,7 +28,9 @@ def get_listings(doc):
                 'user_likes': row.tr.text.split("\n")[2],
                 'user_ratio': row.find("td", {"class": "sc_itraderbox_td3"}).text,
                 'listing_type': row.find("a", {"class": "labelLink"}).text,
-                'listing_url': "https://www.epicnpc.com" + row.find("a", {"class": ""}).attrs['data-preview-url'].split("/preview")[0],
+                'listing_url': "https://www.epicnpc.com" +
+                               row.find("a", {"class": ""}).attrs['data-preview-url'].split("/preview")[0],
+                'img_urls': []
             }
             listings.append(listing)
             # print(listing)
@@ -35,6 +38,67 @@ def get_listings(doc):
     return listings
 
 
-def parse_listing(url):
+def only_urls(listings):
+    urls = []
+    for listing in listings:
+        urls.append(listing["listing_url"])
+    return urls
+
+
+def listing_details(listing):
+    url = listing['listing_url']
     doc = collect(url)
-    print(doc.prettify())
+
+    wrapper = doc.find("div", {"class": "bbWrapper"})  # Get the wrapper that holds all information
+
+    for image in wrapper.find_all("div", {"class": "bbImageWrapper"}):  # Remove all images from the potential output
+        image.decompose()
+
+    for script in wrapper.find_all("script"):  # Remove all scripts from the potential output
+        script.decompose()
+
+    # Maybe do the same for img links with the 'a' tag later
+
+    lines = wrapper.get_text()  # Turn information left into text that can be easily displayed
+
+    listing["listing_details"] = ""
+    for line in lines.splitlines():
+        listing["listing_details"] += line + "\n"
+
+
+def listing_media(listing):
+    doc = collect(listing["listing_url"])
+    wrapper = doc.find("div", {"class": "bbWrapper"})  # Get the wrapper that holds all information
+
+    images = wrapper.find_all("img")
+    for image in images:
+        if "https" in str(image.get('src')):
+            listing["img_urls"].append(image.get('src'))
+
+    #  Get attachment images
+    attachments = doc.find("section", {"class": "message-attachments"}).find_all("a")
+
+    for attachment in attachments:
+        if attachment.get('href') is not None:
+            listing["img_urls"].append(attachment.get('href'))
+
+
+def display_information(listings):
+    for listing in listings:
+        print("--" + listing["listing_title"] + "--")
+        print("User: " + listing["author"])
+        print("Likes: " + listing["user_likes"])
+        print("Ratio: " + listing["user_ratio"])
+        print(listing["listing_url"])
+        print("\n----------------\n")
+
+
+# These are URLS not Listing Dictionaries
+def compare(old_urls, scraped_urls):
+    new_urls = []
+    for url in scraped_urls:
+        if url not in old_urls:
+            new_urls.append(url)
+    return new_urls
+
+
