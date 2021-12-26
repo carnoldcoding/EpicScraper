@@ -14,6 +14,7 @@ def write_html(listings):
                 }
                 h3 {
                 color: white;
+                padding: 1rem;
                 }
                 p{
                 color: white;
