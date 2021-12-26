@@ -9,7 +9,7 @@ import os
 from os.path import basename
 
 
-def message_config(number: str, message: str, file_path: str, mime_maintype: str, mime_subtype: str, provider: str, sender_credentials: tuple, subject: str = "sent using py",
+def message_config(number: str, message: str, file_path: str, mime_maintype: str, mime_subtype: str, provider: str, sender_credentials: tuple, subject: str = '~Your Hourly Update Sir~',
                  smtp_server="smtp.gmail.com", smtp_port: int = 465):
     sender_email, email_password = sender_credentials
     receiver_email = f"{number}@{PROVIDERS.get(provider).get('mms')}"
@@ -44,8 +44,8 @@ def send_message(message):
     number = os.environ["CELL_NUMBER"]
     message = message
     provider = "Verizon"
-    file_path = "output.csv"
+    file_path = "update.html"
     mime_maintype = "text"
-    mime_subtype = "csv"
+    mime_subtype = "html"
     sender_credentials = (os.environ["BOT_EMAIL"], os.environ["BOT_EMAIL_CODE"])
     message_config(number, message, file_path, mime_maintype, mime_subtype, provider, sender_credentials)

@@ -23,7 +23,7 @@ def get_listings(doc):
     for row in posts:
         if type(row) is not bs4.element.NavigableString:
             listing = {
-                'listing_title': row.find("a", {"class": ""}).text,
+                'listing_title': row.find("a", {"class": ""}).text.encode("utf-8"),
                 'author': row.find("a", {"class": "username"}).text,
                 'user_likes': row.tr.text.split("\n")[2],
                 'user_ratio': row.find("td", {"class": "sc_itraderbox_td3"}).text,
