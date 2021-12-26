@@ -6,7 +6,8 @@ url = "https://www.epicnpc.com/forums/last-cloudia-accounts.1797/"
 
 def main():
     document = collect(url)
-    scrape(document)
+    listings = get_listings(document)
+    parse_listing(listings[0]['listing_url'])
 
 
 main()
