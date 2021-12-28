@@ -11,12 +11,15 @@ file_url = "./output.csv"
 def main():
     document = collect(url)
     listings = get_listings(document)
-    new_urls = compare(read_urls(file_url),
-                       only_urls(listings))  # Compare what's in the file to what was pulled from the web
-    write_html(listings)
+    for listing in listings[:1]:
+        listing_details(listing)
+        listing_media(listing)
+
+    write_urls(listings[:1])
+    write_html(listings[:1])
     # send_message("Thanks for using CarnoldPyBot v1.00")
 
-    # write_urls(listings)
+
 
 
 main()

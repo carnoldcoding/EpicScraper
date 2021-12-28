@@ -64,6 +64,7 @@ def listing_details(listing):
     listing["listing_details"] = ""
     for line in lines.splitlines():
         listing["listing_details"] += line + "\n"
+    listing["listing_details"] = listing["listing_details"].encode("ascii", "ignore")
 
 
 def listing_media(listing):
@@ -76,11 +77,14 @@ def listing_media(listing):
             listing["img_urls"].append(image.get('src'))
 
     #  Get attachment images
-    attachments = doc.find("section", {"class": "message-attachments"}).find_all("a")
+    try:
+        attachments = doc.find("section", {"class": "message-attachments"}).find_all("a")
 
-    for attachment in attachments:
-        if attachment.get('href') is not None:
-            listing["img_urls"].append(attachment.get('href'))
+        for attachment in attachments:
+            if attachment.get('href') is not None:
+                listing["img_urls"].append(attachment.get('href'))
+    except:
+        print("Nothing there")
 
 
 def display_information(listings):

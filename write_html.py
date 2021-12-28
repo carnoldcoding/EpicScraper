@@ -1,5 +1,8 @@
+from scraper import *
+
+
 def write_html(listings):
-    num = 10
+    listing_id = -1
 
     html = '''
     <!DOCTYPE html>
@@ -98,8 +101,21 @@ def write_html(listings):
             
             
     '''
+
+    html += '''
+                    <script>
+                        function nextImage(element, imgArray, index)
+                            {
+                                var img = document.getElementById(element);
+                                console.log(index.index);
+                            }  
+                        </script>
+                    '''
+
     for listing in listings:
+        listing_id += 1
         html += '''
+        
         <body>
               <div class="container">
                 <div class="row">
@@ -112,20 +128,46 @@ def write_html(listings):
                         User: %s <br>
                         Upvotes: %s <br>
                         Ratio: %s <br>
-                        Listing: %s
+                        Listing: %s <br>
+                        Details: %s
                       </p>
                       <a href="%s" class="btn">Go to Listing</a>
                     </div>
                   </div>
                   </div>
                   </div>
-        </body>
         
         ''' % (listing["listing_title"].decode('ascii', 'ignore'), listing["author"], listing["user_likes"],
-               listing["user_ratio"], listing["listing_type"],
+               listing["user_ratio"], listing["listing_type"], listing["listing_details"].decode()[:200] + "...",
                listing["listing_url"])
 
-    html += "</html>"
+        for x in range(len(listing["img_urls"])):
+            print("count: " + str(x))
+
+            if x == 0:
+                print("First condition")
+                html += '''
+                <script>
+                var img_array_%s = new Array();
+                 
+                const index_%s = {
+                  index: 0  
+                };
+                </script>
+            
+                <img src = '%s' id = 'img_id_%s' />
+                <button type="button" onclick="nextImage('img_id_%s', img_array_%s, index_%s.index)">Try it</button>
+                
+                <script>
+                ''' % (listing_id, listing_id, listing["img_urls"][x], listing_id, listing_id, listing_id, listing_id)
+            html += '''
+            img_array_%s[%s] = new Image();
+            img_array_%s[%s].src = '%s'
+            ''' % (listing_id, x, listing_id, x, listing["img_urls"][x])
+
+        html += '''</script>'''
+
+    html += " </body> </html>"
     file = open("update.html", "w")
     file.write(html)
     file.close()
