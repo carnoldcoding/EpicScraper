@@ -19,7 +19,7 @@ def main():
 
     write_urls(listings[:results])
     write_html(listings[:results])
-    # send_message("Thanks for using CarnoldPyBot v1.00")
+    send_message("Thanks for using CarnoldPyBot v1.00")
 
 
 
