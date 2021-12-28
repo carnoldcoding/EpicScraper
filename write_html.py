@@ -11,10 +11,15 @@ def write_html(listings):
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>CarnoldPyBot</title>
-              <style>* {
+              <style>
+              * {
               padding: 0;
               margin: 0;
               box-sizing: border-box;
+            }
+            
+            p {
+                margin: .5rem;
             }
             
             body {
@@ -63,7 +68,12 @@ def write_html(listings):
             
             .card-body .img{
               background-color: #a4a29e
-              max-width: 30rem;
+              min-width: 17rem;
+              max-width: 17rem;
+              
+              min-height: 30rem;
+              max-height: 30rem;
+              
               width: 100%;
               height: auto;
               
@@ -107,8 +117,6 @@ def write_html(listings):
             }
             </style>
             </head>
-            
-            
     '''
 
     html += '''
@@ -136,13 +144,12 @@ def write_html(listings):
                       <h1>%s</h1>
                     </div>
                     <div class="card-body">
-                      <p>
-                        User: %s <br>
-                        Upvotes: %s <br>
-                        Ratio: %s <br>
-                        Listing: %s <br>
-                        Details: %s
-                      </p>
+                      <p> <b><u>User Info</u></b></p>
+                      <p>%s</p>
+                      <p> %s Upvotes, %s Positive</p>
+                      <p> %s </p>
+                      <p> <b><u>Account Details</u></b></p>
+                      <p>%s</p>
                     
         
         ''' % (listing["listing_title"].decode('ascii', 'ignore'), listing["author"], listing["user_likes"],
@@ -152,8 +159,6 @@ def write_html(listings):
 
         for x in range(len(listing["img_urls"])):
             if x == 0:
-                print('here')
-                print("Listing: " + str(listing["listing_title"]))
                 html += '''
                 <script>
                 var img_array_%s = new Array();
@@ -166,7 +171,7 @@ def write_html(listings):
                 
                 <img class = 'img' src = '%s' id = 'img_id_%s' />
                 <a class="btn" onclick="nextImage('img_id_%s', img_array_%s, index_%s)">Next Image</a>
-                <a href="%s" class="btn">Go to Listing</a>
+                <a href="%s" class="btn" target="_blank" >Go to Listing</a>
                 </div>
                 </div>
                 </div>

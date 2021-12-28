@@ -6,12 +6,13 @@ import os
 
 url = "https://www.epicnpc.com/forums/last-cloudia-accounts.1797/"
 file_url = "./output.csv"
-results = 6
+results = 10
 
 
 def main():
     document = collect(url)
     listings = get_listings(document)
+
     for listing in listings[:results]:
         listing_details(listing)
         listing_media(listing)
