@@ -61,6 +61,14 @@ def write_html(listings):
               background-color: #a4a29e
             }
             
+            .card-body .img{
+              background-color: #a4a29e
+              max-width: 30rem;
+              width: 100%;
+              height: auto;
+              
+            }
+            
             .card-body .btn {
               display: block;
               color: #fff;
@@ -71,8 +79,9 @@ def write_html(listings):
               padding: 10px 5px;
             }
             
-            .card:hover {
+            .card-body .btn:hover {
               transform: scale(1.05);
+              transition: .3s;
               box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
             }
             
@@ -106,17 +115,20 @@ def write_html(listings):
                     <script>
                         function nextImage(element, imgArray, index)
                             {
-                                var img = document.getElementById(element);
-                                console.log(index.index);
+                                console.log(index.index)
+                                index.index += 1;
+                                document.getElementById(element).src=imgArray[index.index].src;
+                                if (index.index == imgArray.length-1){
+                                    index.index = 0;
+                                }
                             }  
                         </script>
+                        <body>
                     '''
 
     for listing in listings:
         listing_id += 1
         html += '''
-        
-        <body>
               <div class="container">
                 <div class="row">
                   <div class="card">
@@ -131,21 +143,17 @@ def write_html(listings):
                         Listing: %s <br>
                         Details: %s
                       </p>
-                      <a href="%s" class="btn">Go to Listing</a>
-                    </div>
-                  </div>
-                  </div>
-                  </div>
+                    
         
         ''' % (listing["listing_title"].decode('ascii', 'ignore'), listing["author"], listing["user_likes"],
-               listing["user_ratio"], listing["listing_type"], listing["listing_details"].decode()[:200] + "...",
-               listing["listing_url"])
+               listing["user_ratio"], listing["listing_type"], listing["listing_details"].decode()[:200] + "...")
+        if len(listing["img_urls"]) == 0:
+            listing["img_urls"].append("https://tacm.com/wp-content/uploads/2018/01/no-image-available.jpeg")
 
         for x in range(len(listing["img_urls"])):
-            print("count: " + str(x))
-
             if x == 0:
-                print("First condition")
+                print('here')
+                print("Listing: " + str(listing["listing_title"]))
                 html += '''
                 <script>
                 var img_array_%s = new Array();
@@ -153,19 +161,27 @@ def write_html(listings):
                 const index_%s = {
                   index: 0  
                 };
+                
                 </script>
-            
-                <img src = '%s' id = 'img_id_%s' />
-                <button type="button" onclick="nextImage('img_id_%s', img_array_%s, index_%s.index)">Try it</button>
+                
+                <img class = 'img' src = '%s' id = 'img_id_%s' />
+                <a class="btn" onclick="nextImage('img_id_%s', img_array_%s, index_%s)">Next Image</a>
+                <a href="%s" class="btn">Go to Listing</a>
+                </div>
+                </div>
+                </div>
+                </div>
                 
                 <script>
-                ''' % (listing_id, listing_id, listing["img_urls"][x], listing_id, listing_id, listing_id, listing_id)
+                ''' % (listing_id, listing_id, listing["img_urls"][x], listing_id, listing_id, listing_id, listing_id,
+                       listing["listing_url"])
             html += '''
             img_array_%s[%s] = new Image();
             img_array_%s[%s].src = '%s'
             ''' % (listing_id, x, listing_id, x, listing["img_urls"][x])
 
-        html += '''</script>'''
+            if x == len(listing["img_urls"]) - 1:
+                html += '''</script>'''
 
     html += " </body> </html>"
     file = open("update.html", "w")

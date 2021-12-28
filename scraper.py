@@ -73,7 +73,8 @@ def listing_media(listing):
 
     images = wrapper.find_all("img")
     for image in images:
-        if "https" in str(image.get('src')):
+        if "https" in str(image.get('src')) and str(image.get('src')) not in listing["img_urls"] and 'unicode' not in \
+                str(image.get('src')):
             listing["img_urls"].append(image.get('src'))
 
     #  Get attachment images
@@ -84,7 +85,7 @@ def listing_media(listing):
             if attachment.get('href') is not None:
                 listing["img_urls"].append(attachment.get('href'))
     except:
-        print("Nothing there")
+        print("No Attachments")
 
 
 def display_information(listings):
@@ -104,5 +105,3 @@ def compare(old_urls, scraped_urls):
         if url not in old_urls:
             new_urls.append(url)
     return new_urls
-
-

@@ -6,17 +6,18 @@ import os
 
 url = "https://www.epicnpc.com/forums/last-cloudia-accounts.1797/"
 file_url = "./output.csv"
+results = 6
 
 
 def main():
     document = collect(url)
     listings = get_listings(document)
-    for listing in listings[:1]:
+    for listing in listings[:results]:
         listing_details(listing)
         listing_media(listing)
 
-    write_urls(listings[:1])
-    write_html(listings[:1])
+    write_urls(listings[:results])
+    write_html(listings[:results])
     # send_message("Thanks for using CarnoldPyBot v1.00")
 
 
