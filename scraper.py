@@ -1,10 +1,6 @@
 import bs4.element
 from bs4 import BeautifulSoup
 import requests
-from selenium import webdriver
-
-# Set up Selenium for dynamic webpage scraping (imgur)
-PATH = "C:/Program Files (x86)/ChromeDriver/chromedriver.exe"
 
 
 # Send HTTP Request and store the response
@@ -92,14 +88,8 @@ def listing_media(listing):
 
     # Get imgur carousel images
     try:
-        driver = webdriver.Chrome(PATH)
         imgur_album = doc.find("blockquote", {"class": "imgur-embed-pub"}).find("a").attrs["href"]
         print(imgur_album)
-
-        driver.get(imgur_album)
-        print(driver.title)
-
-        driver.quit()
 
     except:
         print("No Imgur Album")
